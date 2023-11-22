@@ -48,11 +48,11 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build -t cicd-linode:latest .
-          docker tag cicd-linode:latest http://172.234.63.107:5000/cicd-linode:latest
+          docker tag cicd-linode:latest 172.234.63.107:5000/cicd-linode:latest
 
       - name: Push Docker Image to Linode Registry
         run: |
-          docker push http://172.234.63.107:5000/cicd-linode:latest
+          docker push 172.234.63.107:5000/cicd-linode:latest
 
       - name: Deploy to Linode
         uses: appleboy/ssh-action@master
@@ -62,7 +62,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: '22'
           script: |
-            docker pull http://172.234.63.107:5000/cicd-linode:latest
+            docker pull 172.234.63.107:5000/cicd-linode:latest
             docker stop cicd-linode || true
             docker rm cicd-linode || true
-            docker run -d --name cicd-linode -p 80:80 http://172.234.63.107:5000/cicd-linode:latest
+            docker run -d --name cicd-linode -p 80:80 172.234.63.107:5000/cicd-linode:latest
