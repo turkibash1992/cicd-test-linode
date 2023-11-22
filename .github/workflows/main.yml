@@ -39,7 +39,6 @@ on:
   push:
     branches:
       - main
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -49,13 +48,13 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build -t cicd-linode:latest .
-          docker tag cicd-linode:latest ${{ secrets.DOCKER_USERNAME }}/cicd-linode:latest
+          docker tag cicd-linode:latest 172.232.217.78/cicd-linode:latest
 
       - name: Log in to Docker registry
-        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login 172.232.217.78 --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
       - name: Push Docker Image to Remote Registry
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/cicd-linode:latest
+        run: docker push 172.232.217.78/cicd-linode:latest
 
       - name: Deploy to Linode
         uses: appleboy/ssh-action@master
@@ -65,7 +64,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: '22'
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/cicd-linode:latest
+            docker pull 172.232.217.78/cicd-linode:latest
             docker stop cicd-linode || true
             docker rm cicd-linode || true
-            docker run -d --name cicd-linode -p 80:80 ${{ secrets.DOCKER_USERNAME }}/cicd-linode:latest
+            docker run -d --name cicd-linode -p 80:80 172.234.63.107/cicd-linode:latest
