@@ -22,7 +22,7 @@ jobs:
           docker tag cicd-linode:latest 172.232.217.78/cicd-linode:latest
 
       - name: Log in to Docker registry
-        run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login --username ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+        run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login --username ${{ secrets.REGISTRY_USERNAME }} --password
 
       - name: Push Docker Image to Remote Registry
         run: docker push 172.232.217.78/cicd-linode:latest
