@@ -46,8 +46,10 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set-hostname
-        run: | 
-        echo 172.232.217.78 hub.docker.com | sudo tee -a /etc/hosts 
+        run: |
+
+      - name: Set DOCKER_HOST environment variable
+        run: echo "172.232.217.78 hub.docker.com" >> sudo tee -a /etc/hosts
 
       - name: Build Docker Image
         run: |
