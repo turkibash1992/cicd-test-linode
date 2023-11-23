@@ -58,7 +58,7 @@ jobs:
           docker tag cicd-linode:latest hub.docker.com/cicd-linode:latest
 
       - name: Log in to Docker registry
-        run: docker login --username nshareef --password-stdin nshareef
+        run: docker login 172.232.217.78:5000 --username nshareef --password-stdin nshareef
 
       - name: Push Docker Image to Remote Registry
         run: docker push hub.docker.com/cicd-linode:latest
