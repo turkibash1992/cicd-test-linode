@@ -3,8 +3,8 @@ FROM node:16 as build-stage
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
-COPY certs/ca.pem /usr/local/share/ca-certificates/ca.cert
-RUN ubdate-ca-certificates
+COPY certs/ca.pem /usr/local/share/ca-certificates/ca.crt
+RUN update-ca-certificates
 COPY . ./
 RUN npm run build
 
