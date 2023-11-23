@@ -1,42 +1,75 @@
-name: Deploy cicd-linode to Linode with Docker
+# name: Deploy cicd-linode to Linode with Docker
+
+# on:
+#   push:
+#     branches:
+#       - main
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v2
+
+#       - name: Modify /etc/hosts
+#         run: |
+#           echo "172.232.217.78:5000 registry-1.docker.io" | sudo tee -a /etc/hosts
+#           cat /etc/hosts
+
+#       - name: Build Docker Image
+#         run: |
+#           docker build -t cicd-linode:latest .
+#           docker tag cicd-linode:latest 172.232.217.78:5000/cicd-linode:latest
+
+#       - name: Log in to Docker registry
+#         run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login --username ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+
+#       - name: Push Docker Image to Remote Registry
+#         run: docker push 172.232.217.78:5000/cicd-linode:latest
+
+#       - name: Deploy to Linode
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.HOST }}
+#           username: ${{ secrets.USERNAME }}
+#           key: ${{ secrets.SSH_PRIVATE_KEY }}
+#           port: '22'
+#           script: |
+#             docker pull hub.docker.com/cicd-linode:latest
+#             docker stop cicd-linode || true
+#             docker rm cicd-linode || true
+#             docker run -d --name cicd-linode -p 80:80 172.234.63.107/cicd-linode:latest
+
+name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  deploy:
+  build-push-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Check Out Repo
+        uses: actions/checkout@v2
 
-      - name: Modify /etc/hosts
+      - name: Log in to Private Docker Registry
+        run: echo ${{ secrets.REGISTRY_PASSWORD }} | docker login 172.232.217.78 --username ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+
+      - name: Build and Push Docker Image
         run: |
-          echo "172.232.217.78:5000 registry-1.docker.io" | sudo tee -a /etc/hosts
-          cat /etc/hosts
+          docker build -t 172.232.217.78/cicd-linode:latest .
+          docker push 172.232.217.78/cicd-linode:latest
 
-      - name: Build Docker Image
-        run: |
-          docker build -t cicd-linode:latest .
-          docker tag cicd-linode:latest 172.232.217.78:5000/cicd-linode:latest
-
-      - name: Log in to Docker registry
-        script: | 
-        echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login --username ${{ secrets.REGISTRY_USERNAME }} --password-stdin
-
-      - name: Push Docker Image to Remote Registry
-        run: docker push 172.232.217.78:5000/cicd-linode:latest
-
-      - name: Deploy to Linode
+      - name: SSH and Deploy on Server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
+          host: 172.234.63.107
           username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: '22'
           script: |
-            docker pull hub.docker.com/cicd-linode:latest
+            docker pull 172.232.217.78/cicd-linode:latest
             docker stop cicd-linode || true
             docker rm cicd-linode || true
-            docker run -d --name cicd-linode -p 80:80 172.234.63.107/cicd-linode:latest
+            docker run -d --name cicd-linode -p externalPort:internalPort 172.232.217.78/cicd-linode:latest
