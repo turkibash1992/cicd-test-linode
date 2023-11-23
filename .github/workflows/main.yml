@@ -49,10 +49,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    services:
-      - name: hub.docker.com
-        host: 172.232.217.78
-        port: 443
+    # services:
+    #   - name: hub.docker.com
+    #     host: 172.232.217.78
+    #     port: 443
 
     steps:
       - uses: actions/checkout@v2
@@ -63,7 +63,7 @@ jobs:
           docker tag cicd-linode:latest hub.docker.com/cicd-linode:latest
 
       - name: Log in to Docker registry
-        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login hub.docker.com --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login --extra-host "hub.docker.com:172.232.217.78" --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
       - name: Push Docker Image to Remote Registry
         run: docker push hub.docker.com/cicd-linode:latest
