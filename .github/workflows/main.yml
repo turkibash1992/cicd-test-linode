@@ -54,7 +54,7 @@ jobs:
 
       - name: Modify /etc/hosts
         run: |
-          echo "172.232.217.78 registry-1.docker.io" | sudo tee -a /etc/hosts
+          echo "172.232.217.78 registry-1.docker.io/v2/" | sudo tee -a /etc/hosts
           cat /etc/hosts
 
       - name: Build Docker Image
