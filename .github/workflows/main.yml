@@ -54,7 +54,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t 172.232.217.78/cicd-linode:latest .
+          docker build -t cicd-linode:latest .
           docker tag cicd-linode:latest 172.232.217.78/cicd-linode:latest
 
       - name: Log in to Docker registry
