@@ -13,19 +13,19 @@ jobs:
 
       - name: Modify /etc/hosts
         run: |
-          echo "172.232.217.78 registry-1.docker.io" | sudo tee -a /etc/hosts
+          echo "172.232.217.78:5000 registry-1.docker.io" | sudo tee -a /etc/hosts
           cat /etc/hosts
 
       - name: Build Docker Image
         run: |
           docker build -t cicd-linode:latest .
-        # docker tag cicd-linode:latest 172.232.217.78/cicd-linode:latest
+          docker tag cicd-linode:latest 172.232.217.78:5000/cicd-linode:latest
 
       - name: Log in to Docker registry
         run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login --username ${{ secrets.REGISTRY_USERNAME }} --password-stdin
 
       - name: Push Docker Image to Remote Registry
-        run: docker push 172.232.217.78/cicd-linode:latest
+        run: docker push 172.232.217.78:5000/cicd-linode:latest
 
       - name: Deploy to Linode
         uses: appleboy/ssh-action@master
