@@ -39,7 +39,8 @@ on:
   push:
     branches:
       - main
-services:
+      
+services: 
   - name: hub.docker.com
     host: 172.232.217.78
     port: 443
