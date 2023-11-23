@@ -54,7 +54,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Debug - Check Network Connectivity to Private Registry
-        run: ping -c 4 172.232.217.78
+        run: ping -c 4 172.232.217.78:5000
 
       - name: Log in to Private Docker Registry
         run: echo ${{ secrets.REGISTRY_PASSWORD }} | docker login --username ${{ secrets.REGISTRY_USERNAME }} --password-stdin
