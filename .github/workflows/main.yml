@@ -44,10 +44,11 @@ services:
   - name: hub.docker.com
     host: 172.232.217.78
     port: 443
-    
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    
     services:
   - name: hub.docker.com
     host: 172.232.217.78
