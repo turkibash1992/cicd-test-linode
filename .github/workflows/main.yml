@@ -45,8 +45,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set-hostname
-        run: |
 
       - name: Set DOCKER_HOST environment variable
         run: | 
