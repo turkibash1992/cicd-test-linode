@@ -97,7 +97,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GHCR_PAT }}
 
       - name: Push to GitHub Container Registry
         run: docker push ghcr.io/${{ github.repository }}/cicd-linode:latest
