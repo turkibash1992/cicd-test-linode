@@ -35,5 +35,5 @@ RUN npm run build
 
 # Step 7: Install 'serve' and serve the app
 RUN npm install -g serve
-CMD ["serve", "-s", "dist", "-p", "4000"]
+CMD ["serve", "-s", "dist", "-p", "2000"]
 
