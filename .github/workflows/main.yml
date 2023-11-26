@@ -110,6 +110,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
             docker pull ghcr.io/${{ github.repository }}/cicd-linode:latest
             docker stop cicd-linode || true
             docker rm cicd-linode || true
