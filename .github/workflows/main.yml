@@ -106,8 +106,8 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: 172.234.63.107
-          username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
