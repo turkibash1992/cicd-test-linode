@@ -114,4 +114,4 @@ jobs:
             docker pull ghcr.io/${{ github.repository }}/cicd-linode:latest
             docker stop cicd-linode || true
             docker rm cicd-linode || true
-            docker run -d --name cicd-linode -p 9000:80 ghcr.io/${{ github.repository }}/cicd-linode:latest
+            docker run -d --name cicd-linode -p 3000:3000 ghcr.io/${{ github.repository }}/cicd-linode:latest
