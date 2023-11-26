@@ -100,18 +100,18 @@ jobs:
           password: ${{ secrets.GHCR_PAT }}
 
       - name: Push to GitHub Container Registry
-        run: docker push ghcr.io/${{ github.repository }}/cicd-linode:latest
+        run: docker push ghcr.io/${{ github.repository }}/cicd-linode:v1
 
       - name: SSH and Deploy on Server
         uses: appleboy/ssh-action@master
         with:
-          host: 172.234.63.107
+          host: ${{ secrets.HOST }}
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo ${{ secrets.GHCR_PAT }} | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
-            docker pull ghcr.io/${{ github.repository }}/cicd-linode:latest
+            docker pull ghcr.io/${{ github.repository }}/cicd-linode:v1
             docker stop cicd-linode || true
             docker rm cicd-linode || true
-            docker run -d --name cicd-linode -p 3000:3000 ghcr.io/${{ github.repository }}/cicd-linode:latest --network host
+            docker run -d --name cicd-linode -p 4000:4000 ghcr.io/${{ github.repository }}/cicd-linode:v1
